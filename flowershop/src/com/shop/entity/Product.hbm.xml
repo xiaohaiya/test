@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.shop.entity.Product" table="product">
+		<!-- 建立类中的属性与表中的主键对应 -->
+		<id name="id" column="id" >
+			<!-- 主键生成策略 -->
+			<generator class="native"/>
+		</id>
+		
+		<!-- 建立类中的普通的属性和表的字段的对应 -->
+		<property name="pname" column="pname"  />
+		<property name="oldPrice" column="pold_price"  />
+		<property name="newPrice" column="pnew_price"  />
+		<property name="pdetail" column="pdetail"  />
+		<property name="infourl" column="infourl"  />
+		<property name="createtime" column="createtime"  />
+		<property name="offtime" column="offtime"  />
+		<property name="status" column="status"  />
+
+		<many-to-one name="category" class="com.shop.entity.Category" column="cid" lazy="false"></many-to-one>
+	
+		<set name="images" lazy="false">
+			<key column="pid"></key>
+			<one-to-many class="com.shop.entity.Images" />
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.shop.entity.Shopuser" table="shopuser">
+		<!-- 建立类中的属性与表中的主键对应 -->
+		<id name="id" column="id" >
+			<!-- 主键生成策略 -->
+			<generator class="native"/>
+		</id>
+		
+		<!-- 建立类中的普通的属性和表的字段的对应 -->
+		<property name="name" column="name"  />
+		<property name="password" column="password"  />
+		<property name="phone" column="phone"  />
+		<property name="birthday" column="birthday"  />
+		<property name="gender" column="gender" />
+		<property name="picture" column="picture" />
+		<property name="address" column="address"  />
+		<property name="email" column="email"  />
+		<property name="status" column="status"  />
+		<property name="username" column="username"  />	
+		<property name="createtime" column="createtime"  />	
+		<set name="shopaddress">
+			<key column="uid"></key>
+			<one-to-many class="com.shop.entity.Address" />
+		</set>	
+		<set name="orders">
+			<key column="userid"></key>
+			<one-to-many class="com.shop.entity.Order" />
+		</set>	
+	</class>
+</hibernate-mapping>

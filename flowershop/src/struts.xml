@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 配置Struts2中的常量 -->
+	<constant name="struts.action.extension" value="action"/>
+	<!-- 配置上传文件的总大小10M -->
+	<constant name="struts.multipart.maxSize" value="10485760"></constant>
+	
+	<!-- 前台商城的配置action -->
+	<package name="front" extends="struts-default" namespace="/">
+		<!-- 自定义登陆拦截器 -->
+		<interceptors>
+			<interceptor name="privilegeInterceptor" class="com.shop.action.interceptor.PrivilegeInterceptor"></interceptor>
+			<interceptor name="adminInterceptor" class="com.shop.action.interceptor.AdminInterceptor"></interceptor>
+		</interceptors>
+		<!-- 定义全局的返回 -->
+		<global-results>
+			<result name="login">/login.jsp</result>
+			<result name="backlogin">/admin/index.jsp</result>
+		</global-results>
+		
+		<!-- 用户模块的action -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="success" type="redirect">/</result>
+			<result name="regist">/regist.jsp</result>
+			<result name="quit">/index.jsp</result>
+			<result name="info">/userinfo.jsp</result>
+			<result name="updateinfo" type="redirectAction">user_info.action</result>
+			<result name="portrait">/userportrait.jsp</result>
+			<result name="upload" type="redirectAction">user_info.action</result>
+			<result name="input">/ceshi.jsp</result>
+			<result name="findaddr">/address.jsp</result>
+			<result name="updatepasword">/updatepassword.jsp</result>
+			<result name="forgetui">/forgetpaswd.jsp</result>
+			<interceptor-ref name="privilegeInterceptor">
+				<!-- 要过滤掉登陆和注册 -->
+				<param name="excludeMethods">login,regist,getImg,findByUserName,forgetPaswd,forgetui,reupaswd</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack">
+				<!-- 单个文件的大小限制 2M -->
+				<param name="fileUpload.maximumSize">2097152</param>
+				<!-- 上传文件类型的限制 -->
+				<param name="fileUpload.allowedExtensions">.jpg,.png</param>
+			</interceptor-ref>
+		</action>
+		
+		<!-- 用户收货地址 -->
+		<action name="addr_*" class="addressAction" method="{1}">
+			<result name="success" type="redirectAction">user_findaddr.action</result>
+			<result name="findById">/addressedit.jsp</result>
+			<interceptor-ref name="privilegeInterceptor"></interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<!-- 商品模块 -->
+		<action name="product_*" class="productAction" method="{1}">
+			<result name="findAll">/product.jsp</result>
+			<result name="findById">/productinfo.jsp</result>
+			<result name="save">/ceshi.jsp</result>
+			<interceptor-ref name="privilegeInterceptor">
+				<!-- 要过滤掉登陆和注册 -->
+				<param name="excludeMethods">findAll,findById</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack">
+				<!-- 单个文件的大小限制 2M -->
+				<param name="fileUpload.maximumSize">2097152</param>
+				<!-- 上传文件类型的限制 -->
+				<param name="fileUpload.allowedExtensions">.jpg,.png</param>
+			</interceptor-ref>
+		</action>
+		<!-- 购物项模块 -->
+		<action name="cart_*" class="cartAction" method="{1}">
+			<result name="findAllCart">/ordering.jsp</result>
+			<result name="findCart">/order.jsp</result>
+			<result name="findCarts">/cart.jsp</result>
+			<interceptor-ref name="privilegeInterceptor"></interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<!-- 订单模块 -->
+		<action name="order_*" class="orderAction" method="{1}">
+			<result name="save">/payment.jsp</result>
+			<result name="pay">/pay.jsp</result>
+			<result name="findCarts">/order.jsp</result>
+			<result name="myorder">/myorder.jsp</result>
+			<result name="orderinfo">/myorderview.jsp</result>
+			<result name="paysucess">/paysuccess.jsp</result>
+			<result name="returnorder">/myreturnorder.jsp</result>
+			<result name="cancle" type="redirectAction">order_myorder.action</result>
+			<interceptor-ref name="privilegeInterceptor"></interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		
+		<!-- 订单模块 -->
+		<action name="feedback_*" class="feedbackAction" method="{1}">
+		</action>
+		
+		<!-- 新闻 -->
+		<action name="news_*" class="newsAction" method="{1}">
+			<result name="findAll">/news.jsp</result>
+			<result name="findById">/newsinfo.jsp</result>
+		</action>
+		
+		<!-- 后台管理模块的action -->
+		<action name="admin_*" class="adminAction" method="{1}">
+			<result name="success" type="redirectAction">admin_main.action</result>
+			<result name="quit" type="redirectAction">admin_index.action</result>
+			<result name="main">/admin/admin.jsp</result>
+			<result name="input">/admin/page/ceshi.jsp</result>
+			<result name="productlist">/admin/page/productlist.jsp</result>
+			<result name="findpro">/admin/page/productinfo.jsp</result>
+			<result name="proinfodetail">/admin/page/proinfodetail.jsp</result>
+			<result name="offproductlist">/admin/page/offproductlist.jsp</result>
+			<result name="rederect" type="redirectAction">admin_allproduct.action</result>
+			<result name="allorder">/admin/page/orderlist.jsp</result>
+			<result name="orderinfo">/admin/page/orderinfo.jsp</result>
+			<result name="finduser">/admin/page/userlist.jsp</result>
+			<result name="offuser" type="redirectAction">admin_alluser.action</result>
+			<result name="prohibituser">/admin/page/userlist.jsp</result>
+			<result name="allfb">/admin/page/feedbacklist.jsp</result>
+			<result name="fbinfo">/admin/page/answerfb.jsp</result>
+			<result name="updatefb" type="redirectAction">admin_oldfb.action</result>
+			<result name="allnews">/admin/page/newslist.jsp</result>
+			<result name="oldnews">/admin/page/oldnewslist.jsp</result>
+			<result name="addnews" type="redirectAction">admin_allnews.action</result>
+			<result name="newsinfo">/admin/page/newsinfo.jsp</result>
+			<result name="excell" type="stream">
+				<param name="contentType">application/vnd.ms-excel,charset=ISO8859-1</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>  
+				<param name="bufferSize">4096</param>
+				<param name="inputName">fis</param>  
+			</result>
+			<interceptor-ref name="adminInterceptor">
+				<!-- 要过滤掉登陆和注册 -->
+				<param name="excludeMethods">login,index</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+	</package>
+	
+</struts>
